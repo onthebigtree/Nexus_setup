@@ -12,7 +12,18 @@ wget https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VER
 unzip -q protoc-${PROTOC_VERSION}-linux-x86_64.zip -d $HOME/protoc
 export PATH=$PATH:$HOME/protoc/bin
 
+# 验证安装
 protoc --version
 
+# 安装 Nexus CLI
 curl -s https://cli.nexus.xyz/ | sh
+
+# 编辑 prover-id
+cd $HOME/.nexus
+echo "hs70DnBmCBZAUvcPEegWQE5UTm02" > prover-id
+
+# 重新运行 Nexus CLI 安装命令
+source $HOME/.cargo/env
+curl -s https://cli.nexus.xyz/ | sh
+
 echo "运行完成."
