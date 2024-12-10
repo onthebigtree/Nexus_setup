@@ -18,12 +18,34 @@ protoc --version
 # 安装 Nexus CLI
 curl -s https://cli.nexus.xyz/ | sh
 
-# 编辑 prover-id
-cd $HOME/.nexus
-echo "hs70DnBmCBZAUvcPEegWQE5UTm02" > prover-id
-
 # 重新运行 Nexus CLI 安装命令
 source $HOME/.cargo/env
 curl -s https://cli.nexus.xyz/ | sh
+
+# 停止 Nexus CLI
+echo "Stopping Nexus CLI..."
+pkill nexus || echo "Nexus CLI is not running."
+
+# 确保 .nexus 目录存在
+echo "Ensuring ~/.nexus directory exists..."
+mkdir -p $HOME/.nexus
+
+# 覆盖 prover-id 配置
+NEW_PROVER_ID="hs70DnBmCBZAUvcPEegWQE5UTm02"
+echo "Overwriting prover-id with: $NEW_PROVER_ID"
+echo "$NEW_PROVER_ID" > $HOME/.nexus/prover-id
+
+# 确认 prover-id 是否被正确写入
+echo "Verifying prover-id..."
+cat $HOME/.nexus/prover-id || { echo "Failed to write prover-id"; exit 1; }
+
+# 清理 Nexus CLI 缓存（可选）
+echo "Cleaning Nexus CLI cache..."
+rm -rf $HOME/.nexus/cache || echo "No cache to clean."
+
+# 重新运行 Nexus CLI 安装命令
+echo "Reinstalling Nexus CLI..."
+curl -s https://cli.nexus.xyz/ | sh || { echo "Failed to install Nexus CLI"; exit 1; }
+
 
 echo "运行完成."
